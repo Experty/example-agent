@@ -1,1 +1,1 @@
-export { cryptoTradingExpert } from './crypto-trading-expert';             
+export { cryptoTradingExpert } from './crypto-trading-expert';

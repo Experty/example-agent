@@ -1,5 +1,5 @@
-import { createTool } from "@mastra/core/tools";
-import { z } from "zod";
+import { createTool } from '@mastra/core/tools';
+import { z } from 'zod';
 
 interface SMAValues {
   sma7: number | null;
@@ -86,67 +86,75 @@ interface SentimentDataInput {
 }
 
 const generateTradingRecommendation = (
-  technicalData: TechnicalDataInput, 
+  technicalData: TechnicalDataInput,
   sentimentData: SentimentDataInput
 ): TradingRecommendationResponse => {
   try {
     const { technicalIndicators } = technicalData;
     const { marketSentimentData } = sentimentData;
-    
+
     const { trend, rsiSignal } = technicalIndicators;
     const marketSentiment = marketSentimentData.interpretation;
-    
-    let technicalSignal: string = "LONG";
-    if (trend === "strongly bullish" || trend === "bullish") {
-      technicalSignal = "LONG";
-    } else if (trend === "strongly bearish" || trend === "bearish") {
-      technicalSignal = "SHORT";
+
+    let technicalSignal: string = 'LONG';
+    if (trend === 'strongly bullish' || trend === 'bullish') {
+      technicalSignal = 'LONG';
+    } else if (trend === 'strongly bearish' || trend === 'bearish') {
+      technicalSignal = 'SHORT';
     }
-    
-    if (rsiSignal === "overbought" && technicalSignal === "LONG") {
-      technicalSignal = "SHORT";
-    } else if (rsiSignal === "oversold" && technicalSignal === "SHORT") {
-      technicalSignal = "LONG";
+
+    if (rsiSignal === 'overbought' && technicalSignal === 'LONG') {
+      technicalSignal = 'SHORT';
+    } else if (rsiSignal === 'oversold' && technicalSignal === 'SHORT') {
+      technicalSignal = 'LONG';
     }
-    
-    let sentimentSignal: string = "LONG";
-    if (marketSentiment.includes("bullish")) {
-      sentimentSignal = "LONG";
-      if (marketSentiment.includes("extremely") && marketSentiment.includes("overbought")) {
-        sentimentSignal = "SHORT";
+
+    let sentimentSignal: string = 'LONG';
+    if (marketSentiment.includes('bullish')) {
+      sentimentSignal = 'LONG';
+      if (
+        marketSentiment.includes('extremely') &&
+        marketSentiment.includes('overbought')
+      ) {
+        sentimentSignal = 'SHORT';
       }
-    } else if (marketSentiment.includes("bearish")) {
-      sentimentSignal = "SHORT";
-      if (marketSentiment.includes("extremely") && marketSentiment.includes("oversold")) {
-        sentimentSignal = "LONG";
+    } else if (marketSentiment.includes('bearish')) {
+      sentimentSignal = 'SHORT';
+      if (
+        marketSentiment.includes('extremely') &&
+        marketSentiment.includes('oversold')
+      ) {
+        sentimentSignal = 'LONG';
       }
     }
-    
-    let finalSignal: string = "LONG";
-    
+
+    let finalSignal: string = 'LONG';
+
     if (technicalSignal === sentimentSignal) {
       finalSignal = technicalSignal;
-    } 
-    else {
+    } else {
       finalSignal = technicalSignal;
     }
-    
-    let recommendedTimeframe: string = "medium-term";
-    if (finalSignal === "LONG" && trend === "strongly bullish") {
-      recommendedTimeframe = "long-term";
-    } else if (finalSignal === "SHORT" && trend === "strongly bearish") {
-      recommendedTimeframe = "short-term";
+
+    let recommendedTimeframe: string = 'medium-term';
+    if (finalSignal === 'LONG' && trend === 'strongly bullish') {
+      recommendedTimeframe = 'long-term';
+    } else if (finalSignal === 'SHORT' && trend === 'strongly bearish') {
+      recommendedTimeframe = 'short-term';
     }
-    
-    let confidenceLevel: string = "medium";
-    if (technicalSignal === sentimentSignal && (trend.includes("strongly") || marketSentiment.includes("extremely"))) {
-      confidenceLevel = "high";
+
+    let confidenceLevel: string = 'medium';
+    if (
+      technicalSignal === sentimentSignal &&
+      (trend.includes('strongly') || marketSentiment.includes('extremely'))
+    ) {
+      confidenceLevel = 'high';
     } else if (technicalSignal !== sentimentSignal) {
-      confidenceLevel = "low";
+      confidenceLevel = 'low';
     }
-    
+
     return {
-      status: "success",
+      status: 'success',
       symbol: technicalData.symbol,
       recommendation: {
         signal: finalSignal,
@@ -154,7 +162,7 @@ const generateTradingRecommendation = (
         recommendedTimeframe,
         technicalAnalysisSignal: technicalSignal,
         marketSentimentSignal: sentimentSignal,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       },
       supportingData: {
         technical: {
@@ -165,72 +173,80 @@ const generateTradingRecommendation = (
             values: {
               sma7: technicalIndicators.sma.sma7,
               sma25: technicalIndicators.sma.sma25,
-              sma99: technicalIndicators.sma.sma99
+              sma99: technicalIndicators.sma.sma99,
             },
             positions: {
               aboveSMA7: technicalIndicators.sma.aboveSMA7,
               aboveSMA25: technicalIndicators.sma.aboveSMA25,
-              aboveSMA99: technicalIndicators.sma.aboveSMA99
-            }
-          }
+              aboveSMA99: technicalIndicators.sma.aboveSMA99,
+            },
+          },
         },
         sentiment: {
           marketSentiment: marketSentimentData.interpretation,
           fearGreedIndex: marketSentimentData.globalFearGreedIndex.value,
-          fearGreedDescription: marketSentimentData.globalFearGreedIndex.description
-        }
-      }
+          fearGreedDescription:
+            marketSentimentData.globalFearGreedIndex.description,
+        },
+      },
     };
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     return {
-      status: "error",
-      message: errorMessage || "Error generating trading recommendation"
+      status: 'error',
+      message: errorMessage || 'Error generating trading recommendation',
     };
   }
 };
 
-const technicalDataSchema = z.object({
-  symbol: z.string(),
-  currentPrice: z.number(),
-  technicalIndicators: z.object({
-    sma: z.object({
-      sma7: z.number().nullable(),
-      sma25: z.number().nullable(),
-      sma99: z.number().nullable(),
-      aboveSMA7: z.boolean(),
-      aboveSMA25: z.boolean(),
-      aboveSMA99: z.boolean()
+const technicalDataSchema = z
+  .object({
+    symbol: z.string(),
+    currentPrice: z.number(),
+    technicalIndicators: z.object({
+      sma: z.object({
+        sma7: z.number().nullable(),
+        sma25: z.number().nullable(),
+        sma99: z.number().nullable(),
+        aboveSMA7: z.boolean(),
+        aboveSMA25: z.boolean(),
+        aboveSMA99: z.boolean(),
+      }),
+      rsi: z.number().nullable(),
+      rsiSignal: z.string(),
+      trend: z.string(),
     }),
-    rsi: z.number().nullable(),
-    rsiSignal: z.string(),
-    trend: z.string()
   })
-}).describe("Technical analysis data for the cryptocurrency");
+  .describe('Technical analysis data for the cryptocurrency');
 
-const sentimentDataSchema = z.object({
-  symbol: z.string(),
-  marketSentimentData: z.object({
-    globalFearGreedIndex: z.object({
-      value: z.number(),
-      description: z.string(),
-      classification: z.string()
+const sentimentDataSchema = z
+  .object({
+    symbol: z.string(),
+    marketSentimentData: z.object({
+      globalFearGreedIndex: z.object({
+        value: z.number(),
+        description: z.string(),
+        classification: z.string(),
+      }),
+      interpretation: z.string(),
+      timestamp: z.string(),
+      timeUpdated: z.string(),
     }),
-    interpretation: z.string(),
-    timestamp: z.string(),
-    timeUpdated: z.string()
   })
-}).describe("Market sentiment data for the cryptocurrency");
+  .describe('Market sentiment data for the cryptocurrency');
 
 export const tradingRecommendation = createTool({
-  id: "Generate Trading Recommendation",
+  id: 'Generate Trading Recommendation',
   inputSchema: z.object({
     technicalData: technicalDataSchema,
-    sentimentData: sentimentDataSchema
+    sentimentData: sentimentDataSchema,
   }),
-  description: "Generates a trading recommendation (LONG/SHORT) based on technical analysis and market sentiment data",
+  description:
+    'Generates a trading recommendation (LONG/SHORT) based on technical analysis and market sentiment data',
   execute: async ({ context: { technicalData, sentimentData } }) => {
-    console.log(`Generating trading recommendation for ${technicalData.symbol}...`);
+    console.log(
+      `Generating trading recommendation for ${technicalData.symbol}...`
+    );
     return generateTradingRecommendation(technicalData, sentimentData);
   },
 });

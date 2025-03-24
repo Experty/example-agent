@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "playground": "npx mastra dev",
+    "watch": "tsx watch src/bin/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
     "typecheck": "tsc --noEmit"
@@ -16,14 +17,30 @@
     "@ai-sdk/openai": "latest",
     "@mastra/core": "latest",
     "@mastra/memory": "^0.2.4",
+    "debug": "^4.4.0",
     "dotenv": "^16.4.7",
     "node-fetch": "^3.3.2",
+    "ws": "^8.18.1",
     "zod": "^3.24.2"
   },
   "devDependencies": {
+    "@antfu/eslint-config": "^4.11.0",
+    "@eslint/js": "^9.23.0",
+    "@types/debug": "^4.1.12",
+    "@types/dotenv": "^8.2.3",
     "@types/node": "^22.13.11",
+    "@types/ws": "^8.18.0",
+    "eslint": "^9.23.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-node": "^4.1.0",
+    "eslint-config-prettier": "^10.1.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^5.2.4",
+    "globals": "^16.0.0",
     "mastra": "^0.4.2",
+    "prettier": "^3.5.3",
     "tsx": "^4.19.3",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.2",
+    "typescript-eslint": "^8.27.0"
   }
 }

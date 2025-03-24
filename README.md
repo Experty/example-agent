@@ -16,11 +16,22 @@ This repository demonstrates how to build a specialized AI agent using the Mastr
 pnpm install
 ```
 
-3. Set up your environment variables by creating a `.env.development` file:
+3. Set up your environment variables by creating a `.env` file based on the `.env.example` template:
+
+```bash
+cp .env.example .env
+```
+
+Then edit the `.env` file to add your required environment variables:
 
 ```
+# Required environment variables
+NODE_ENV=development
 OPENAI_API_KEY=your_openai_api_key
+WS_URL=ws://localhost:3000
 ```
+
+The application won't start without these required environment variables.
 
 4. Run the agent in development mode:
 

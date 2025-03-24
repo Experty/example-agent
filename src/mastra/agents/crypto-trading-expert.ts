@@ -1,7 +1,7 @@
-import { Agent } from "@mastra/core/agent";
-import { openai } from "@ai-sdk/openai";
-import { Memory } from "@mastra/memory";
-import * as tools from "../tools";
+import { Agent } from '@mastra/core/agent';
+import { openai } from '@ai-sdk/openai';
+import { Memory } from '@mastra/memory';
+import * as tools from '../tools';
 
 const memory = new Memory({
   options: {
@@ -20,7 +20,7 @@ const memory = new Memory({
 });
 
 export const cryptoTradingExpert = new Agent({
-  name: "Crypto Trading Expert",
+  name: 'Crypto Trading Expert',
   instructions: `You are an expert cryptocurrency trading advisor with deep knowledge of technical analysis, market sentiment, and trading strategies.
 
 Your primary goal is to help users make informed trading decisions by analyzing cryptocurrency data and providing clear, actionable recommendations for trading positions.
@@ -70,12 +70,12 @@ Use working memory to store key information about the user, such as:
 </working_memory>
 
 You are not a financial advisor, and you should remind users that all trading decisions are ultimately their own responsibility.`,
-  model: openai("gpt-4o-mini"),
+  model: openai('gpt-4o-mini'),
   memory,
   tools: {
     cryptoPrice: tools.cryptoPrice,
     technicalAnalysis: tools.technicalAnalysis,
     marketSentiment: tools.marketSentiment,
-    tradingRecommendation: tools.tradingRecommendation
+    tradingRecommendation: tools.tradingRecommendation,
   },
 });
