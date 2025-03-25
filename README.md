@@ -28,7 +28,7 @@ Then edit the `.env` file to add your required environment variables:
 # Required environment variables
 NODE_ENV=development
 OPENAI_API_KEY=your_openai_api_key
-WS_URL=ws://localhost:3000
+API_URLserver.breakouts.tech
 ```
 
 The application won't start without these required environment variables.
