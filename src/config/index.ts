@@ -10,7 +10,7 @@ const envSchema = z.object({
   OPENAI_API_KEY: z.string().min(1, 'OPENAI_API_KEY is required'),
   DEBUG: z.string().optional(),
   API_URL: z.string().url('API_URL must be a valid URL'),
-  ALTS_GAMES_API_KEY: z.string().min(1, 'ALTS_GAMES_API_KEY is required'),
+  ALT_GAMES_API_KEY: z.string().min(1, 'ALT_GAMES_API_KEY is required'),
 });
 
 type EnvConfig = z.infer<typeof envSchema>;

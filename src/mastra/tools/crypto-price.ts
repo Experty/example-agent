@@ -18,7 +18,7 @@ interface PriceResponse {
 
 const formatBinanceSymbol = (symbol: string): string => {
   const normalizedSymbol = symbol.toUpperCase().replace(/[^A-Z0-9]/g, '');
-  return `${normalizedSymbol}USDT`;
+  return `${normalizedSymbol}USDC`;
 };
 
 const getCryptoPrice = async (symbol: string): Promise<PriceResponse> => {
@@ -47,7 +47,7 @@ const getCryptoPrice = async (symbol: string): Promise<PriceResponse> => {
       status: 'success',
       symbol: symbol,
       price: parseFloat(data.price),
-      currency: 'USDT',
+      currency: 'USDC',
       timestamp: new Date().toISOString(),
     };
   } catch (error) {
@@ -70,7 +70,7 @@ export const cryptoPrice = createTool({
       ),
   }),
   description:
-    'Fetches the current price of a cryptocurrency in USDT from Binance',
+    'Fetches the current price of a cryptocurrency in USDC from Binance',
   execute: async ({ context: { symbol } }) => {
     console.log(`Fetching price for ${symbol} from Binance...`);
     return await getCryptoPrice(symbol);

@@ -59,7 +59,7 @@ interface TechnicalAnalysisResponse {
 
 const formatBinanceSymbol = (symbol: string): string => {
   const normalizedSymbol = symbol.toUpperCase().replace(/[^A-Z0-9]/g, '');
-  return `${normalizedSymbol}USDT`;
+  return `${normalizedSymbol}USDC`;
 };
 
 const calculateSMA = (prices: number[], period: number): number | null => {

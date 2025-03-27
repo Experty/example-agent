@@ -29,7 +29,7 @@ export const insertAnswer = async (payload: AnswerPayload) => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'X-Api-Key': env.ALTS_GAMES_API_KEY,
+      'X-Api-Key': env.ALT_GAMES_API_KEY,
     },
     body: JSON.stringify(payload),
   });
