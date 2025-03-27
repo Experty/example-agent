@@ -36,3 +36,20 @@ export const insertAnswer = async (payload: AnswerPayload) => {
 
   return response.json();
 };
+
+export const getActiveLiveGame = async () => {
+  const response = await fetch(
+    `http://${env.API_URL}/api/v1/agents/games/active`,
+    {
+      method: 'GET',
+      headers: {
+        'X-Api-Key': env.ALT_GAMES_API_KEY,
+      },
+    }
+  );
+  if (!response.ok) {
+    return;
+  }
+
+  return response.json();
+};
